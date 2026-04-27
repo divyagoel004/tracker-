@@ -1,0 +1,58 @@
+[
+  {
+    "test_name": "ssc cgl",
+    "date": "2026-04-27",
+    "test_type": "Full Mock",
+    "mock_no": 1,
+    "sections": {
+      "quant": {
+        "attempted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "skipped": 0,
+        "qs_left_at_end": 0,
+        "time_used": 15.0,
+        "net_score": 0.0
+      },
+      "english": {
+        "attempted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "skipped": 0,
+        "qs_left_at_end": 0,
+        "time_used": 15.0,
+        "net_score": 0.0
+      },
+      "reasoning": {
+        "attempted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "skipped": 0,
+        "qs_left_at_end": 0,
+        "time_used": 15.0,
+        "net_score": 0.0
+      },
+      "gk": {
+        "attempted": 0,
+        "correct": 0,
+        "wrong": 0,
+        "skipped": 0,
+        "qs_left_at_end": 0,
+        "time_used": 15.0,
+        "net_score": 0.0
+      }
+    },
+    "topic_data": {
+      "quant": [],
+      "english": [],
+      "reasoning": [],
+      "gk": []
+    },
+    "total_score": 0.0,
+    "time_issue": "No \u2014 done comfortably",
+    "mood": "Confident",
+    "notes": "",
+    "id": "t_20260427_204655_097122",
+    "created_at": "2026-04-27T20:46:55.097155"
+  }
+]
