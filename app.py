@@ -20,7 +20,6 @@ with st.sidebar:
         "📆 Weekly Report",
         "🔬 Deep Analysis",
         "🗓️ Study Scheduler",
-        "📚 Question Bank",
         "📈 Charts",
     ], label_visibility="collapsed")
     st.divider()
@@ -41,7 +40,6 @@ pages = {
     "Weekly Report": "pages/weekly_report.py",
     "Deep Analysis": "pages/deep_analysis.py",
     "Study Scheduler":"pages/scheduler.py",
-    "Question Bank": "pages/question_bank.py",
     "Charts":        "pages/charts.py",
 }
 if p in pages:
