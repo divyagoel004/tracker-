@@ -74,7 +74,9 @@ def get_schedule(): return _r("schedule.json")
 def set_schedule(d): _w("schedule.json", d)
 
 # ── reports cache ──────────────────────────────────────────────────────────────
-def get_reports(): return _r("reports.json")
+def get_reports():
+    p = DATA / "reports.json"
+    return json.loads(p.read_text()) if p.exists() else {}
 
 def cache_report(kind, key, text, meta=None):
     r = get_reports()
