@@ -1,21 +1,16 @@
-import json
+import json, os
 from datetime import date, datetime, timedelta
-import streamlit as st
+from pathlib import Path
 
-def _client():
-    from supabase import create_client
-    return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
+DATA = Path("data")
+DATA.mkdir(exist_ok=True)
 
 def _r(p):
-    key = p.replace(".json", "")
-    res = _client().table("data").select("value").eq("key", key).execute()
-    if res.data:
-        return res.data[0]["value"]
-    return [] if p.endswith("s.json") else {}
+    p = DATA / p
+    return json.loads(p.read_text()) if p.exists() else ([] if p.name.endswith("s.json") else {})
 
 def _w(p, d):
-    key = p.replace(".json", "")
-    _client().table("data").upsert({"key": key, "value": d}).execute()
+    (DATA / p).write_text(json.dumps(d, indent=2, default=str))
 
 # ── profile ────────────────────────────────────────────────────────────────────
 def get_profile(): return _r("profile.json")
