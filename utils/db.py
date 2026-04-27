@@ -1,16 +1,21 @@
-import json, os
+import json
 from datetime import date, datetime, timedelta
-from pathlib import Path
+import streamlit as st
 
-DATA = Path("data")
-DATA.mkdir(exist_ok=True)
+def _client():
+    from supabase import create_client
+    return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
 
 def _r(p):
-    p = DATA / p
-    return json.loads(p.read_text()) if p.exists() else ([] if p.name.endswith("s.json") else {})
+    key = p.replace(".json", "")
+    res = _client().table("data").select("value").eq("key", key).execute()
+    if res.data:
+        return res.data[0]["value"]
+    return [] if p.endswith("s.json") else {}
 
 def _w(p, d):
-    (DATA / p).write_text(json.dumps(d, indent=2, default=str))
+    key = p.replace(".json", "")
+    _client().table("data").upsert({"key": key, "value": d}).execute()
 
 # ── profile ────────────────────────────────────────────────────────────────────
 def get_profile(): return _r("profile.json")
@@ -74,9 +79,7 @@ def get_schedule(): return _r("schedule.json")
 def set_schedule(d): _w("schedule.json", d)
 
 # ── reports cache ──────────────────────────────────────────────────────────────
-def get_reports():
-    p = DATA / "reports.json"
-    return json.loads(p.read_text()) if p.exists() else {}
+def get_reports(): return _r("reports.json")
 
 def cache_report(kind, key, text, meta=None):
     r = get_reports()
