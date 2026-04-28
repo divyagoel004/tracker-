@@ -1,16 +1,26 @@
-import json, os
+import json
 from datetime import date, datetime, timedelta
-from pathlib import Path
+from pymongo import MongoClient
 
-DATA = Path("data")
-DATA.mkdir(exist_ok=True)
+MONGO_URI = "mongodb+srv://divyagoellcs_db_user:bTMkq329XwGtNDSG@cluster0.jmt0zun.mongodb.net/?appName=Cluster0"
+
+_mongo_client = None
+def _col():
+    global _mongo_client
+    if _mongo_client is None:
+        _mongo_client = MongoClient(MONGO_URI)
+    return _mongo_client["ssc_tracker"]["data"]
 
 def _r(p):
-    p = DATA / p
-    return json.loads(p.read_text()) if p.exists() else ([] if p.name.endswith("s.json") else {})
+    key = p.replace(".json", "")
+    doc = _col().find_one({"_id": key})
+    if doc:
+        return doc["value"]
+    return [] if p.endswith("s.json") else {}
 
 def _w(p, d):
-    (DATA / p).write_text(json.dumps(d, indent=2, default=str))
+    key = p.replace(".json", "")
+    _col().update_one({"_id": key}, {"$set": {"value": d}}, upsert=True)
 
 # ── profile ────────────────────────────────────────────────────────────────────
 def get_profile(): return _r("profile.json")
@@ -75,8 +85,8 @@ def set_schedule(d): _w("schedule.json", d)
 
 # ── reports cache ──────────────────────────────────────────────────────────────
 def get_reports():
-    p = DATA / "reports.json"
-    return json.loads(p.read_text()) if p.exists() else {}
+    doc = _col().find_one({"_id": "reports"})
+    return doc["value"] if doc and isinstance(doc.get("value"), dict) else {}
 
 def cache_report(kind, key, text, meta=None):
     r = get_reports()
